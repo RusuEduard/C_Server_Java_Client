@@ -56,6 +56,7 @@ int handle_client(int c){
     }
 
     printf("[SERVER] New string is: %s\n", s3);
+    send(c, s3, len3, 0);
     close(c);
 }
 

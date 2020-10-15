@@ -15,7 +15,6 @@ public class Client{
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        DataInputStream cIn = new DataInputStream(c.getInputStream());
         DataOutputStream cOut = new DataOutputStream(c.getOutputStream());
 
         System.out.println("Read the 1st string:");
@@ -33,6 +32,9 @@ public class Client{
         cOut.writeShort(len2 + 1);
         cOut.writeBytes(s2 + '\0');
         cOut.flush();
+        byte[] b = new byte[100];
+        c.getInputStream().read(b);
+        System.out.println("[Client] received: " +new String(b));
         
         c.close();
     }
