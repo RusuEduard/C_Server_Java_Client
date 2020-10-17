@@ -24,6 +24,41 @@ void handle_client(int c){
     for(int i = 0; i < size; i++){
         printf("%d ", elems[i]);
     }
+
+    uint16_t size2;
+    recv(c, &size2, sizeof(size2), MSG_WAITALL);
+    size2 = ntohs(size2);
+    printf("[SERVER] I got the size of the 2nd array: %d\n", size2);
+
+    uint16_t elems2[size2];
+    for(int i = 0; i < size2; i++){
+        recv(c, &nr, sizeof(nr), MSG_WAITALL);
+        nr = ntohs(nr);
+        elems2[i] = nr;
+        }
+
+    printf("[SERVER] I got the next array:\n");
+    for(int i = 0; i < size2; i++){
+        printf("%d ", elems2[i]);
+    }
+    int k = 0;
+    uint16_t final[size + size2];
+    for(int i = 0; i < size; i++){
+        for(int j = 0; j < size2; j++){
+            if(elems[i] == elems2[j]){
+                final[k] = elems[i];
+                k++;
+            }
+        }
+    }
+    k = htons(k);
+    send(c, &k, sizeof(k), 0);
+    k = ntohs(k);
+    for(int i = 0; i < k; i++){
+        final[i] = htons(final[i]);
+        send(c, &final[i], sizeof(final[i]), 0);
+    }
+
     close(c);
 }
 
